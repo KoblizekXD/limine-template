@@ -50,7 +50,7 @@ OBJ       := $(addprefix $(BUILD)/,$(CFILES:.c=.c.o) $(NASMFILES:.asm=.asm.o))
 # Collect all C files and map them to their corresponding header dependency file
 HEADER_DEPS := $(addprefix $(BUILD)/,$(CFILES:.c=.c.d))
 
-.PHONY: all all-hdd run run-debug run-hdd clean
+.PHONY: all all-hdd run run-debug run-hdd clean freshen
 
 all: $(ISO_OUTPUT)
 all-hdd: $(HDD_OUTPUT)
@@ -83,6 +83,14 @@ run-debug: $(DEPS)/ovmf/ovmf-code-$(ARCH).fd $(ISO_OUTPUT)
 		-drive if=pflash,unit=0,format=raw,file=$(DEPS)/ovmf/ovmf-code-$(ARCH).fd,readonly=on \
 		-cdrom $(ISO_OUTPUT) \
 		-m 2G
+
+clean:
+	rm -rf $(BUILD)
+	mkdir -p $(BUILD)
+
+freshen:
+	rm -rf $(BUILD) $(DEPS) kernel-deps $(INCLUDE)
+	mkdir $(BUILD) $(DEPS)
 
 #========================================================================================================== The ISO & Hard Drives
 
