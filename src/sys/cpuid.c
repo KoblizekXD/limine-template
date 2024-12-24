@@ -14,8 +14,8 @@ void cpuid(uint32_t leaf, uint32_t subleaf, uint32_t *eax, uint32_t *ebx, uint32
         : "r" ((uint64_t)leaf), "r" ((uint64_t)subleaf)
         : "rax", "rbx", "rcx", "rdx"
     );
-    *eax = (uint32_t)rax;
-    *ebx = (uint32_t)rbx;
-    *ecx = (uint32_t)rcx;
-    *edx = (uint32_t)rdx;
+    if (eax) *eax = (uint32_t)rax;
+    if (ebx) *ebx = (uint32_t)rbx;
+    if (ecx) *ecx = (uint32_t)rcx;
+    if (edx) *edx = (uint32_t)rdx;
 }
