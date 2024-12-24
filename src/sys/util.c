@@ -1,6 +1,12 @@
 #include <stdint.h>
 #include <sys/util.h>
 
+void halt()
+{
+    while (1)
+        asm("hlt");
+}
+
 void outb(uint16_t port, uint8_t c)
 {
     asm(

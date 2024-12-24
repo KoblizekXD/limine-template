@@ -1,7 +1,16 @@
+#include <limine.h>
+#include <sys/util.h>
 
-int kmain()
+__attribute__((used, section(".limine_requests")))
+static volatile LIMINE_BASE_REVISION(3);
+
+__attribute__((used, section(".limine_requests_start")))
+static volatile LIMINE_REQUESTS_START_MARKER;
+
+__attribute__((used, section(".limine_requests_end")))
+static volatile LIMINE_REQUESTS_END_MARKER;
+
+void kmain(void)
 {
-    while (1)
-        asm("hlt");
-    return 0;
+    halt();
 }
