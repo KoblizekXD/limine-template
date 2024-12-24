@@ -85,6 +85,7 @@ run-debug: $(DEPS)/ovmf/ovmf-code-$(ARCH).fd $(ISO_OUTPUT)
 		-m 2G
 
 clean:
+	@printf "\033[36m==> Cleaning up\033[0m\n"
 	rm -rf $(BUILD)
 	mkdir -p $(BUILD)
 
@@ -108,6 +109,7 @@ $(HDD_OUTPUT): $(DEPS)/limine/limine kernel $(BIN_OUTPUT)
 	mcopy -i $(HDD_OUTPUT)@@1M $(DEPS)/limine/BOOTIA32.EFI ::/EFI/BOOT
 
 $(ISO_OUTPUT): $(DEPS)/limine/limine kernel-deps $(BIN_OUTPUT)
+	@printf "\033[32m==> Building ISO image\033[0m\n"
 	rm -rf $(BUILD)/iso_root
 	mkdir -p $(BUILD)/iso_root/boot
 	cp -v $(BIN_OUTPUT) $(BUILD)/iso_root/boot/
@@ -128,6 +130,7 @@ $(ISO_OUTPUT): $(DEPS)/limine/limine kernel-deps $(BIN_OUTPUT)
 
 # Pulls down the kernel dependencies
 kernel-deps:
+	@printf "\033[32m==> Pulling dependencies...\033[0m\n"
 	./get-deps.sh
 	touch kernel-deps
 
@@ -146,6 +149,7 @@ $(DEPS)/ovmf/ovmf-code-$(ARCH).fd:
 
 # Link everything together
 $(BIN_OUTPUT): linker.ld $(OBJ) $(DEPS)/cc-runtime/cc-runtime.a
+	@printf "\033[32m==> Linking object files\033[0m\n"
 	mkdir -p "$$(dirname $@)"
 	$(LD) $(OBJ) $(DEPS)/cc-runtime/cc-runtime.a $(LDFLAGS) -o $@
 
