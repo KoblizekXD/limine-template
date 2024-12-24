@@ -6,6 +6,7 @@ ARCH    := x86_64
 BUILD   := build
 DEPS    := deps
 SRC     := src
+RES     := res
 INCLUDE := include
 
 IMAGE_NAME := $(BUILD)/kernel
@@ -45,7 +46,8 @@ CPPFLAGS  := -I $(SRC) -I $(INCLUDE) \
 # Collect all files and connect them to the corresponding object
 CFILES    := $(shell cd $(SRC) && find -L * -type f -name '*.c' | LC_ALL=C sort)
 NASMFILES := $(shell cd $(SRC) && find -L * -type f -name '*.asm' | LC_ALL=C sort)
-OBJ       := $(addprefix $(BUILD)/,$(CFILES:.c=.c.o) $(NASMFILES:.asm=.asm.o))
+RESFILES  := $(shell cd $(RES) && find -L * -type f -name '*.*' | LC_ALL=C sort) 
+OBJ       := $(addprefix $(BUILD)/,$(CFILES:.c=.c.o) $(NASMFILES:.asm=.asm.o) $(addsuffix .res.o, $(RESFILES)))
 
 # Collect all C files and map them to their corresponding header dependency file
 HEADER_DEPS := $(addprefix $(BUILD)/,$(CFILES:.c=.c.d))
@@ -168,3 +170,8 @@ $(BUILD)/%.c.o: $(SRC)/%.c
 $(BUILD)/%.asm.o: $(SRC)/%.asm
 	mkdir -p "$$(dirname $@)"
 	nasm $(NASMFLAGS) $< -o $@
+
+$(BUILD)/%.res.o: $(RES)/%
+	mkdir -p "$$(dirname $@)"
+	objcopy -O elf64-x86-64 -B i386 -I binary $< $@
+

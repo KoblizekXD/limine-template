@@ -12,6 +12,13 @@ the [Limine Boot Protocol](https://github.com/limine-bootloader/limine/blob/v8.x
 
 You can change the name of the kernel in the boot menu inside of the `limine.conf` file.
 
+### Structuring
+- `include/` - Contains external header files which do not generally belong to the source code(e.g. auto-generated `limine.h`)
+- `build/` - Contains built kernel files & intermediary object files
+- `deps/` - Contains cloned dependencies required to run the project
+- `res/` - Contains resources which should be converted into object files using the `objdump` command(see [Makefile](./Makefile) full command)
+- `src/` - Contains kernel's main source code, this is where you will spend most of your time
+
 ### Toolchain
 
 I'd say the [Makefile](./Makefile) is pretty well organized, so just a bit of knowledge of make should give
